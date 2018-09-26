@@ -1,0 +1,237 @@
+/* ©2015 Johannes Jakob
+   Made with <3 in Germany */
+
+body {
+  background-image: url('http://getwallpapers.com/wallpaper/full/6/0/4/916246-gorgerous-mac-os-x-desktop-backgrounds-2880x1800-for-1080p.jpg');
+  background-size: cover;
+  background-position: center;
+  color: #000;
+  font-family: Roboto, 'Lucida Grande', Arial, sans-serif;
+  overflow: hidden;
+}
+
+/* window BEGIN */
+
+a {
+  text-decoration: none;
+}
+
+span {
+  line-height: 11px;
+  vertical-align: 50%;
+}
+
+.window {
+  position: absolute;
+  background: #fff;
+  /* border: 1px solid #acacac; */
+  border-radius: 6px;
+  box-shadow: 0px 0px 20px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+.window.active {
+  box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+}
+
+.window .header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 10;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #ebebeb, color-stop(1.0, #d5d5d5)));
+  background: -webkit-linear-gradient(top, #ebebeb, #d5d5d5);
+  background: -moz-linear-gradient(top, #ebebeb, #d5d5d5);
+  background: -ms-linear-gradient(top, #ebebeb, #d5d5d5);
+  background: -o-linear-gradient(top, #ebebeb, #d5d5d5);
+  background: linear-gradient(top, #ebebeb, #d5d5d5);
+  text-align: center;
+  height: 20px;
+  border-top: 1px solid #f3f1f3;
+  border-bottom: 1px solid #b1aeb1;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  overflow: hidden;
+  cursor: default;
+  opacity: 0.35;
+}
+
+.window.active .header {
+  opacity: 1;
+}
+
+.windowtitle {
+  font-size: 11pt;
+  line-height: 20px;
+  color: #4d494d;
+  padding: 0 20px;
+}
+
+.buttons {
+  padding-left: 8px;
+  padding-top: 3px;
+  float: left;
+  line-height: 0px;
+  font-weight: 300;
+}
+
+.button {
+  font-size: 9pt;
+  width: 11px;
+  height: 11px;
+  border: 1px solid gray;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: #aaa;
+  margin-right: 4px;
+}
+
+.active .buttons:hover a {
+  visibility: visible;
+}
+
+.active .close {
+  background: #ff5c5c;
+  border-color: #e33e41;
+}
+
+.close:active {
+  background: #c14645;
+  border: 1px solid #b03537;
+}
+
+.close:active .closebutton {
+  color: #4e0002;
+}
+
+.closebutton {
+  color: #820005;
+  visibility: hidden;
+  cursor: default;
+}
+
+.active .minimize {
+  background: #ffbd4c;
+  border-color: #e09e3e;
+}
+
+.minimize:active {
+  background: #c08e38;
+  border: 1px solid #af7c33;
+}
+
+.minimize:active .minimizebutton {
+  color: #5a2607;
+}
+
+.minimizebutton {
+  color: #9a5518;
+  visibility: hidden;
+  cursor: default;
+}
+
+.active .zoom {
+  background: #00ca56;
+  border-color: #14ae46;
+}
+
+.zoom:active {
+  background: #029740;
+  border: 1px solid #128435;
+}
+
+.zoom:active .zoombutton {
+  color: #003107;
+}
+
+.zoombutton {
+  color: #006519;
+  visibility: hidden;
+  cursor: default;
+}
+
+.content {
+  padding: 10px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 20px;
+  bottom: 0;
+}
+
+/* window END */
+
+/* content BEGIN */
+
+h3 {
+  margin-top: 0px;
+}
+
+/* content END */
+
+.terminal {
+  padding: 10px;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+/* resize */
+.resizers{
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.resizers .resizer{
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  z-index: 1000;
+  visibility: hidden;
+}
+
+.active .resizers .resizer {
+  visibility: visible;
+}
+
+.resizers .resizer.top-left {
+  left: -5px;
+  top: -5px;
+  cursor: nwse-resize; /*resizer cursor*/
+}
+.resizers .resizer.top-right {
+  right: -5px;
+  top: -5px;
+  cursor: nesw-resize;
+}
+.resizers .resizer.bottom-left {
+  left: -5px;
+  bottom: -5px;
+  cursor: nesw-resize;
+}
+.resizers .resizer.bottom-right {
+  right: -5px;
+  bottom: -5px;
+  cursor: nwse-resize;
+}
+
+/* folder */
+.folder {
+  position: absolute;
+}
+
+.folder img {
+  width: 60px;
+  height: auto;
+  display: block;
+}
+
+.folder span {
+
+}
+
+.p-0 {
+  padding: 0;
+}
