@@ -14,9 +14,6 @@ jQuery(function($, undefined) {
     $(this).addClass('active');
     windowStack();
   });
-
-  // initialize terminal
-  initialize_terminal();
 });
 
 function set_windowStack() {
