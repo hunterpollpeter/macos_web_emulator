@@ -5,6 +5,7 @@ body {
   background-image: url('http://getwallpapers.com/wallpaper/full/6/0/4/916246-gorgerous-mac-os-x-desktop-backgrounds-2880x1800-for-1080p.jpg');
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
   color: #000;
   font-family: Roboto, 'Lucida Grande', Arial, sans-serif;
   overflow: hidden;

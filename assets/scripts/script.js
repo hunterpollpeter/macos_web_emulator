@@ -1,4 +1,4 @@
-jQuery(function($, undefined) {
+$(function() {
   set_windowStack();
 
   $('.draggable').each(function(i) {
@@ -13,6 +13,11 @@ jQuery(function($, undefined) {
     $('.window').removeClass('active');
     $(this).addClass('active');
     windowStack();
+  });
+
+  $('.closebutton').click(function(e) {
+    e.preventDefault();
+    parentWindow_recursive(e.currentTarget).remove();
   });
 });
 
@@ -31,3 +36,11 @@ function windowStack() {
     $this.css('z-index', $this.css('z-index') - 1);
   });
 };
+
+function parentWindow_recursive(element) {
+  element = element.parentElement;
+  if (element.classList.contains('window')) {
+    return element;
+  }
+  return parentWindow_recursive(element);
+}
