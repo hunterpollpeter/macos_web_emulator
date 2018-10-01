@@ -19,6 +19,11 @@ $(function() {
     e.preventDefault();
     parentWindow_recursive(e.currentTarget).remove();
   });
+
+  $('.zoombutton').click(function(e) {
+    e.preventDefault();
+    $(parentWindow_recursive(e.currentTarget)).css({top: 0, left: 0, right : 0, bottom: 0, width: "", height: ""}); 
+  });
 });
 
 function set_windowStack() {
