@@ -300,6 +300,7 @@ BrowserFS.configure({ fs: 'IndexedDB', options: {} }, function (err) {
             term.push(function(yesno) {
                 if (yesno.match(/^y(es)?$/i)) {
                     fs.getRootFS().empty();
+                    cwd = '/'
                 }
                 if (yesno.match(/^(y(es)?|n(o)?)$/i)) {
                     term.pop();
