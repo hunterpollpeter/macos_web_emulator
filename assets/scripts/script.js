@@ -22,7 +22,7 @@ $(function() {
 
   $('.zoombutton').click(function(e) {
     e.preventDefault();
-    $(parentWindow_recursive(e.currentTarget)).css({top: 0, left: 0, right : 0, bottom: 0, width: "", height: ""}); 
+    $(parentWindow_recursive(e.currentTarget)).toggleClass('zoomed');
   });
 });
 
@@ -48,4 +48,11 @@ function parentWindow_recursive(element) {
     return element;
   }
   return parentWindow_recursive(element);
+}
+
+function setToZoomed(element) {
+  $element = $(element);
+  if (!$element.hasClass('zoomed')) { return; }
+  $element.removeClass('zoomed');
+  $element.css({top: 0, left: 0, right: "", bottom: "", width: "100%", height: "100%"});
 }

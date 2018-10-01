@@ -19,6 +19,7 @@ function dragableElement(element) {
   }
 
   function elementDrag(e) {
+    setToZoomed(element);
     e = e || window.event;
     e.preventDefault();
     // calculate the new cursor position:
