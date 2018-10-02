@@ -10,7 +10,6 @@ function resizableElement(element) {
   for (let i = 0;i < resizers.length; i++) {
     const currentResizer = resizers[i];
     currentResizer.addEventListener('mousedown', function(e) {
-      console.log('hello');
       e.preventDefault()
       original_width = parseFloat(getComputedStyle(element, null).getPropertyValue('width').replace('px', ''));
       original_height = parseFloat(getComputedStyle(element, null).getPropertyValue('height').replace('px', ''));
@@ -24,6 +23,7 @@ function resizableElement(element) {
 
     function resize(e) {
       setToZoomed(element);
+
       if (currentResizer.classList.contains('bottom-right')) {
         element.style.width = original_width + (e.pageX - original_mouse_x)  + 'px'
         element.style.height = original_height + (e.pageY - original_mouse_y)  + 'px'

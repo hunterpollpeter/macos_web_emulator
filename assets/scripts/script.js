@@ -1,4 +1,6 @@
 $(function() {
+  createWindows();
+
   set_windowStack();
 
   $('.draggable').each(function(i) {
@@ -25,6 +27,11 @@ $(function() {
     $(parentWindow_recursive(e.currentTarget)).toggleClass('zoomed');
   });
 });
+
+function createWindows() {
+  $('.window').prepend("<div class='resizers'><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div>");
+  $('.window .header').prepend("<div class='buttons'><div class='button close'><a class='closebutton' href='#''><span>x</span></a></div><div class='button minimize'><a class='minimizebutton' href='#'><span>&ndash;</span></a></div><div class='button zoom'><a class='zoombutton' href='#'><span>+</span></a></div></div>");
+}
 
 function set_windowStack() {
   var start = 999;
