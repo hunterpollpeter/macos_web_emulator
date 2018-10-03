@@ -18,7 +18,6 @@ a {
 }
 
 .window {
-  position: absolute;
   background: #fff;
   /* border: 1px solid #acacac; */
   border-radius: 6px;
@@ -218,19 +217,32 @@ h3 {
   cursor: nwse-resize;
 }
 
-/* folder */
+.desktop-icon {
+  width: 70px;
+  height: 100px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 6px;
+  padding: 5px;
+  text-align: center;
+}
+
+.desktop-icon .icon {
+  width: 100%;
+  height: 70px;
+}
+
+.desktop-icon .name {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .folder {
-  position: absolute;
-}
-
-.folder img {
-  width: 60px;
-  height: auto;
-  display: block;
-}
-
-.folder span {
-
+  background-image: url('../images/folder.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .p-0 {
@@ -244,4 +256,8 @@ h3 {
   bottom: 0 !important;
   width: auto !important;
   height: auto !important;
+}
+
+.draggable {
+  position: absolute;
 }
