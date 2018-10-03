@@ -1301,8 +1301,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param callback
 	 */
 	FS.prototype.mkdir = function mkdir (path$$1, mode, cb) {
-			// TODO: Create folder on desktop when mkdir
-
       if ( cb === void 0 ) cb = nopCb;
 
 	    if (typeof mode === 'function') {
@@ -1314,10 +1312,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        path$$1 = normalizePath(path$$1);
 	        assertRoot(this.root).mkdir(path$$1, mode, newCb);
 
-					// make desktop icon
-					if (!(path$$1.match(/\//g).length > 1)) {
-						$('body').append('<div class="desktop-icon draggable"><div class="icon folder"></div><div class="name">' + path$$1.substring(1) + '</div></div>');
-					}
+					// sync root
+					syncFolder('/')
 	    }
 	    catch (e) {
 	        newCb(e);
@@ -8870,6 +8866,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (noError(e, cb)) {
 	                // INVARIANT: Root always exists.
 	                this$1.makeRootDirectory(cb);
+									syncFolder('/');
 	            }
 	        });
 	    };

@@ -47,6 +47,8 @@ BrowserFSConfigure().then(() => {
     }
     var scope = location.pathname.replace(/\/[^\/]+$/, '/');
 
+    syncFolder('/');
+
     $.fn.confirm = async function(message) {
         var term = $(this).terminal();
         const response = await new Promise(function(resolve) {

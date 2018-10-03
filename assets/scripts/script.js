@@ -63,3 +63,30 @@ function setToZoomed(element) {
   $element.removeClass('zoomed');
   $element.css({top: 0, left: 0, right: "", bottom: "", width: "100%", height: "100%"});
 }
+
+async function syncFolder(path) {
+  var items = await listDir(path);
+  var curr_folders = $('body').children('.desktop-icon').has('.folder').map(function() {
+    return ('#' + this.id);
+  }).get();
+  var folders = [];
+
+  // create folders that do not exist yet
+  items.dirs.forEach(function (dir) {
+    var id = '#folder_' + dir.replace(/ /g,"_");
+    if (!curr_folders.includes(id)) {
+      createFolder(dir);
+    }
+    folders.push(id);
+  });
+
+  // remove folders that do not exist at all
+  $('body').children('.desktop-icon').has('.folder').not(folders.join()).remove();
+}
+
+function createFolder(name) {
+  var safe_name = name.replace(/ /g,"_");
+  var $folder = $('<div id="folder_' + safe_name + '" class="desktop-icon draggable"><div class="icon folder"></div><div class="name">' + name + '</div></div>');
+  dragableElement($folder[0]);
+  $('body').append($folder);
+}
