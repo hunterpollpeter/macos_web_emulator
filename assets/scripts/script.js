@@ -13,6 +13,10 @@ $(function() {
   $('.resizable').each(function(i) {
     resizableElement(this);
   });
+
+  initializeTerminal();
+
+  syncFolder('/');
 });
 
 function createWindows() {
@@ -61,13 +65,20 @@ function parentWindow_recursive(element) {
 function setToZoomed(element) {
   if (!element.hasClass('zoomed')) { return; }
   element.removeClass('zoomed');
-  element.css({top: 0, left: 0, right: "", bottom: "", width: "100%", height: "100%"});
+  element.css({
+    top: 0,
+    left: 0,
+    right: "",
+    bottom: "",
+    width: "100%",
+    height: "100%"
+  });
 }
 
 // folder stuff
 async function syncFolder(path) {
   var items = await listDir(path);
-  var curr_folders = $('#desktop').children('.icon').has('.folder').map(function() {
+  var curr_folders = $('#desktop > .icon').has('.folder').map(function() {
     return ('#' + this.id);
   }).get();
   var folders = [];
@@ -119,15 +130,39 @@ function createIcon(name, id, dblclick) {
   .draggable();
 }
 
-function createWindow(name) {
+function createWindow(name, content) {
   var safe_name = name.replace(/ /g,"_");
-  var $window = $('<div id="window_' + safe_name + '" class="window resizable draggable" name="' + name + '"><div class="header"><span class="windowtitle">' + name + '</span></div><div class="content">content</div></div>');
-  $window.prepend("<div class='resizers'><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div>");
-  var $header = $window.children('.header');
-  $header.prepend("<div class='buttons'><div class='button close'><span class='closebutton'>x</span></div><div class='button minimize'><span class='minimizebutton'>&ndash;</span></div><div class='button zoom'><span class='zoombutton'>+</span></div></div>");
-  $window.mousedown(function(e) {
-    setActiveWindow($(this));
+  var $window = $(`
+    <div id="window_${safe_name}" class="window resizable draggable" name="${name}">
+      <div class="header">
+        <span class="windowtitle">${name}</span>
+      </div>
+      <div class="content"></div>
+    </div>`);
+  $window.prepend(`
+    <div class='resizers'>
+      <div class='resizer top-left'></div>
+      <div class='resizer top-right'></div>
+      <div class='resizer bottom-left'></div>
+      <div class='resizer bottom-right'></div>
+    </div>`)
+  .mousedown(function(e) {
+      setActiveWindow($(this));
   });
+
+  var $header = $window.children('.header');
+  $header.prepend(`
+    <div class='buttons'>
+      <div class='button close'>
+        <span class='closebutton'>x</span>
+      </div>
+      <div class='button minimize'>
+        <span class='minimizebutton'>&ndash;</span>
+      </div>
+      <div class='button zoom'>
+        <span class='zoombutton'>+</span>
+      </div>
+    </div>`);
   $header.find('.close').click(function(e) {
     e.preventDefault();
     parentWindow_recursive(e.currentTarget).remove();
@@ -136,6 +171,10 @@ function createWindow(name) {
     e.preventDefault();
     $(parentWindow_recursive(e.currentTarget)).toggleClass('zoomed');
   });
+
+  var $content = $window.children('.content');
+  $content.append(content);
+
   dragableElement($window);
   resizableElement($window[0]);
   return $window;
@@ -143,10 +182,22 @@ function createWindow(name) {
 
 function openFolder(name) {
   $window = $("[name='" + name + "'].window");
+  $content = $(`<p>contents of "${name}" folder</p>`);
   if ($window.length == 0) {
-    $window = createWindow(name);
+    $window = createWindow(name, $content);
     $('#desktop').append($window);
   }
+  setActiveWindow($window);
+}
+
+function openTerminal() {
+  $window = $("#window_terminal");
+  $content = $(`<div id="terminal"></div>`);
+  if ($window.length == 0) {
+    $window = createWindow('terminal', $content);
+    $('#desktop').append($window);
+  }
+
   setActiveWindow($window);
 }
 
