@@ -14,28 +14,25 @@ $(function() {
   $('.resizable').each(function(i) {
     resizableElement(this);
   });
+});
 
+function createWindows() {
   // set active window
   $('.window').mousedown(function(e) {
     $('.window').removeClass('active');
     $(this).addClass('active');
     windowStack();
   });
-
-  $('.closebutton').click(function(e) {
+  $('.window').prepend("<div class='resizers'><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div>");
+  $('.window .header').prepend("<div class='buttons'><div class='button close'><a class='closebutton' href='#''><span>x</span></a></div><div class='button minimize'><a class='minimizebutton' href='#'><span>&ndash;</span></a></div><div class='button zoom'><a class='zoombutton' href='#'><span>+</span></a></div></div>");
+  $('.window .closebutton').click(function(e) {
     e.preventDefault();
     parentWindow_recursive(e.currentTarget).remove();
   });
-
-  $('.zoombutton').click(function(e) {
+  $('.window .zoombutton').click(function(e) {
     e.preventDefault();
     $(parentWindow_recursive(e.currentTarget)).toggleClass('zoomed');
   });
-});
-
-function createWindows() {
-  $('.window').prepend("<div class='resizers'><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div>");
-  $('.window .header').prepend("<div class='buttons'><div class='button close'><a class='closebutton' href='#''><span>x</span></a></div><div class='button minimize'><a class='minimizebutton' href='#'><span>&ndash;</span></a></div><div class='button zoom'><a class='zoombutton' href='#'><span>+</span></a></div></div>");
 }
 
 function set_windowStack() {
@@ -92,10 +89,48 @@ async function syncFolder(path) {
 
 function createFolder(name) {
   var safe_name = name.replace(/ /g,"_");
-  var $folder = $('<div id="folder_' + safe_name + '" class="icon draggable"><div class="icon-image folder"></div><div class="icon-name"><span>' + name + '</span></div></div>');
+  var $folder = $('<div id="folder_' + safe_name + '" class="icon draggable" name="' + name + '"><div class="icon-image folder"></div><div class="icon-name"><span>' + name + '</span></div></div>');
   dragableElement($folder[0]);
   $folder.iconify();
   $('#desktop').append($folder);
+}
+
+function createWindow(name) {
+  var safe_name = name.replace(/ /g,"_");
+  var $window = $('<div id="window_' + safe_name + '" class="window resizable draggable" name="' + name + '"><div class="header"><span class="windowtitle">' + name + '</span></div><div class="content">content</div></div>');
+  $window.prepend("<div class='resizers'><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div>");
+  var $header = $window.children('.header');
+  $header.prepend("<div class='buttons'><div class='button close'><a class='closebutton' href='#''><span>x</span></a></div><div class='button minimize'><a class='minimizebutton' href='#'><span>&ndash;</span></a></div><div class='button zoom'><a class='zoombutton' href='#'><span>+</span></a></div></div>");
+  $window.mousedown(function(e) {
+    setActiveWindow($(this));
+  });
+  $header.find('.closebutton').click(function(e) {
+    e.preventDefault();
+    parentWindow_recursive(e.currentTarget).remove();
+  });
+  $header.find('.zoombutton').click(function(e) {
+    e.preventDefault();
+    $(parentWindow_recursive(e.currentTarget)).toggleClass('zoomed');
+  });
+  dragableElement($window[0]);
+  resizableElement($window[0]);
+  return $window;
+}
+
+function openFolder(name) {
+  $window = $("[name='" + name + "'].window");
+  if ($window.length == 0) {
+    $window = createWindow(name);
+    $('#desktop').append($window);
+  }
+  setActiveWindow($window);
+}
+
+function setActiveWindow(element) {
+  $window = element.filter('.window');
+  $('.window').removeClass('active');
+  $window.addClass('active');
+  windowStack();
 }
 
 // jquery extensions
@@ -103,7 +138,7 @@ jQuery.fn.extend({
   iconify: function() {
     var $this = this.filter('.icon');
     return $this.dblclick(function() {
-      console.log('double click!')
+      openFolder($this.attr('name'));
     })
     .mousedown(function() {
       $('.icon').removeClass('icon-selected');
