@@ -1,9 +1,14 @@
 $(function() {
+  $('#desktop').mousedown(function() {
+    $('.icon').removeClass('icon-selected');
+  });
+
   createWindows();
 
   set_windowStack();
 
   $('.draggable').each(function(i) {
+    $(this).iconify();
     dragableElement(this);
   });
   $('.resizable').each(function(i) {
@@ -64,9 +69,10 @@ function setToZoomed(element) {
   $element.css({top: 0, left: 0, right: "", bottom: "", width: "100%", height: "100%"});
 }
 
+// folder stuff
 async function syncFolder(path) {
   var items = await listDir(path);
-  var curr_folders = $('body').children('.desktop-icon').has('.folder').map(function() {
+  var curr_folders = $('#desktop').children('.icon').has('.folder').map(function() {
     return ('#' + this.id);
   }).get();
   var folders = [];
@@ -81,12 +87,36 @@ async function syncFolder(path) {
   });
 
   // remove folders that do not exist at all
-  $('body').children('.desktop-icon').has('.folder').not(folders.join()).remove();
+  $('#desktop').children('.icon').has('.folder').not(folders.join()).remove();
 }
 
 function createFolder(name) {
   var safe_name = name.replace(/ /g,"_");
-  var $folder = $('<div id="folder_' + safe_name + '" class="desktop-icon draggable"><div class="icon folder"></div><div class="name">' + name + '</div></div>');
+  var $folder = $('<div id="folder_' + safe_name + '" class="icon draggable"><div class="icon-image folder"></div><div class="icon-name"><span>' + name + '</span></div></div>');
   dragableElement($folder[0]);
-  $('body').append($folder);
+  $folder.iconify();
+  $('#desktop').append($folder);
 }
+
+// jquery extensions
+jQuery.fn.extend({
+  iconify: function() {
+    var $this = this.filter('.icon');
+    return $this.dblclick(function() {
+      console.log('double click!')
+    })
+    .mousedown(function() {
+      $('.icon').removeClass('icon-selected');
+      $this.addClass('icon-selected');
+      clearTimeout(this.downTimer);
+      this.downTimer = setTimeout(function() {
+        $this.addClass('icon-dragging');
+      }, 75);
+      return false;
+    })
+    .mouseup(function() {
+      clearTimeout(this.downTimer);
+      $this.removeClass('icon-dragging');
+    });
+  }
+});
