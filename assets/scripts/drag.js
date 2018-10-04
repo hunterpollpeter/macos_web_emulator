@@ -1,11 +1,11 @@
 function dragableElement(element) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  var header = element.querySelector('.header');
-  if (header) {
-    header.onmousedown = dragMouseDown;
-  } else {
-    element.onmousedown = dragMouseDown;
-  }
+  var $element = element.filter('.draggable');
+  var $handle = $element.find('.header');
+  if ($handle.length === 0) $handle = $element;
+  $handle.mousedown(function(e) {
+    dragMouseDown(e);
+  });
 
   function dragMouseDown(e) {
     e = e || window.event;
@@ -19,7 +19,7 @@ function dragableElement(element) {
   }
 
   function elementDrag(e) {
-    setToZoomed(element);
+    setToZoomed($element);
     e = e || window.event;
     e.preventDefault();
     // calculate the new cursor position:
@@ -28,8 +28,10 @@ function dragableElement(element) {
     pos3 = e.clientX;
     pos4 = e.clientY;
     // set the element's new position:
-    element.style.top = (element.offsetTop - pos2) + "px";
-    element.style.left = (element.offsetLeft - pos1) + "px";
+    $element.css({
+      top: `${($element.offset().top - pos2)}px`,
+      left: `${(element.offset().left - pos1)}px`
+    });
   }
 
   function closeDragElement() {

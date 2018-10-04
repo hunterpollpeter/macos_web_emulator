@@ -7,9 +7,8 @@ $(function() {
 
   set_windowStack();
 
-  $('.draggable').each(function(i) {
-    $(this).iconify();
-    dragableElement(this);
+  $('.window').each(function(i) {
+    dragableElement($(this));
   });
   $('.resizable').each(function(i) {
     resizableElement(this);
@@ -60,10 +59,9 @@ function parentWindow_recursive(element) {
 }
 
 function setToZoomed(element) {
-  $element = $(element);
-  if (!$element.hasClass('zoomed')) { return; }
-  $element.removeClass('zoomed');
-  $element.css({top: 0, left: 0, right: "", bottom: "", width: "100%", height: "100%"});
+  if (!element.hasClass('zoomed')) { return; }
+  element.removeClass('zoomed');
+  element.css({top: 0, left: 0, right: "", bottom: "", width: "100%", height: "100%"});
 }
 
 // folder stuff
@@ -88,11 +86,37 @@ async function syncFolder(path) {
 }
 
 function createFolder(name) {
-  var safe_name = name.replace(/ /g,"_");
-  var $folder = $('<div id="folder_' + safe_name + '" class="icon draggable" name="' + name + '"><div class="icon-image folder"></div><div class="icon-name"><span>' + name + '</span></div></div>');
-  dragableElement($folder[0]);
-  $folder.iconify();
+  var id = `folder_${name.replace(/ /g,"_")}`;
+  $folder = createIcon(name, id, function(){ return openFolder(name) });
   $('#desktop').append($folder);
+}
+
+function createIcon(name, id, dblclick) {
+  var $icon = $(`
+    <div id='${id}' class='icon draggable' name='${name}'>
+      <div class='icon-image folder'></div>
+      <div class="icon-name">
+        <span>${name}</span>
+      </div>
+    </div>`);
+  dragableElement($icon);
+  return $icon.dblclick(function() {
+    dblclick();
+  })
+  .mousedown(function() {
+    $('.icon').removeClass('icon-selected');
+    $icon.addClass('icon-selected');
+    clearTimeout(this.downTimer);
+    this.downTimer = setTimeout(function() {
+      $icon.addClass('icon-dragging');
+    }, 75);
+    return false;
+  })
+  .mouseup(function() {
+    clearTimeout(this.downTimer);
+    $icon.removeClass('icon-dragging');
+  })
+  .draggable();
 }
 
 function createWindow(name) {
@@ -112,7 +136,7 @@ function createWindow(name) {
     e.preventDefault();
     $(parentWindow_recursive(e.currentTarget)).toggleClass('zoomed');
   });
-  dragableElement($window[0]);
+  dragableElement($window);
   resizableElement($window[0]);
   return $window;
 }
@@ -133,25 +157,8 @@ function setActiveWindow(element) {
   windowStack();
 }
 
-// jquery extensions
-jQuery.fn.extend({
-  iconify: function() {
-    var $this = this.filter('.icon');
-    return $this.dblclick(function() {
-      openFolder($this.attr('name'));
-    })
-    .mousedown(function() {
-      $('.icon').removeClass('icon-selected');
-      $this.addClass('icon-selected');
-      clearTimeout(this.downTimer);
-      this.downTimer = setTimeout(function() {
-        $this.addClass('icon-dragging');
-      }, 75);
-      return false;
-    })
-    .mouseup(function() {
-      clearTimeout(this.downTimer);
-      $this.removeClass('icon-dragging');
-    });
-  }
-});
+$.fn.draggable = function() {
+  this.addClass('draggable');
+  dragableElement(this);
+  return this;
+}

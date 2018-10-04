@@ -22,7 +22,7 @@ function resizableElement(element) {
     })
 
     function resize(e) {
-      setToZoomed(element);
+      setToZoomed($(element));
 
       if (currentResizer.classList.contains('bottom-right')) {
         element.style.width = original_width + (e.pageX - original_mouse_x)  + 'px'
