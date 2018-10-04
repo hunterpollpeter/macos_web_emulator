@@ -23,12 +23,12 @@ function createWindows() {
     windowStack();
   });
   $('.window').prepend("<div class='resizers'><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div>");
-  $('.window .header').prepend("<div class='buttons'><div class='button close'><a class='closebutton' href='#''><span>x</span></a></div><div class='button minimize'><a class='minimizebutton' href='#'><span>&ndash;</span></a></div><div class='button zoom'><a class='zoombutton' href='#'><span>+</span></a></div></div>");
-  $('.window .closebutton').click(function(e) {
+  $('.window .header').prepend("<div class='buttons'><div class='button close'><span class='closebutton'>x</span></div><div class='button minimize'><span class='minimizebutton'>&ndash;</span></div><div class='button zoom'><span class='zoombutton'>+</span></div></div>");
+  $('.window .close').click(function(e) {
     e.preventDefault();
     parentWindow_recursive(e.currentTarget).remove();
   });
-  $('.window .zoombutton').click(function(e) {
+  $('.window .zoom').click(function(e) {
     e.preventDefault();
     $(parentWindow_recursive(e.currentTarget)).toggleClass('zoomed');
   });
@@ -124,15 +124,15 @@ function createWindow(name) {
   var $window = $('<div id="window_' + safe_name + '" class="window resizable draggable" name="' + name + '"><div class="header"><span class="windowtitle">' + name + '</span></div><div class="content">content</div></div>');
   $window.prepend("<div class='resizers'><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div>");
   var $header = $window.children('.header');
-  $header.prepend("<div class='buttons'><div class='button close'><a class='closebutton' href='#''><span>x</span></a></div><div class='button minimize'><a class='minimizebutton' href='#'><span>&ndash;</span></a></div><div class='button zoom'><a class='zoombutton' href='#'><span>+</span></a></div></div>");
+  $header.prepend("<div class='buttons'><div class='button close'><span class='closebutton'>x</span></div><div class='button minimize'><span class='minimizebutton'>&ndash;</span></div><div class='button zoom'><span class='zoombutton'>+</span></div></div>");
   $window.mousedown(function(e) {
     setActiveWindow($(this));
   });
-  $header.find('.closebutton').click(function(e) {
+  $header.find('.close').click(function(e) {
     e.preventDefault();
     parentWindow_recursive(e.currentTarget).remove();
   });
-  $header.find('.zoombutton').click(function(e) {
+  $header.find('.zoom').click(function(e) {
     e.preventDefault();
     $(parentWindow_recursive(e.currentTarget)).toggleClass('zoomed');
   });
