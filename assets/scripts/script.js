@@ -15,8 +15,6 @@ $(function() {
   });
 
   initializeTerminal();
-
-  syncFolder('/');
 });
 
 function createWindows() {

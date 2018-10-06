@@ -33,10 +33,12 @@ function BrowserFSConfigure() {
                 resolve();
             }
         });
+    }).then(function() {
+      syncFolder('/');
     });
 }
 
-BrowserFSConfigure();
+ BrowserFSConfigure();
 
 var name = 'git'; // terminal name for history
 window.fs = BrowserFS.BFSRequire('fs');
