@@ -14,7 +14,11 @@ $(function() {
     resizableElement(this);
   });
 
-  initializeTerminal();
+  BrowserFSConfigure().then(function() {
+    syncFolder('/');
+  });
+
+  openTerminal()
 });
 
 function createWindows() {
@@ -194,8 +198,8 @@ function openTerminal() {
   if ($window.length == 0) {
     $window = createWindow('terminal', $content);
     $('#desktop').append($window);
+    initializeTerminal();
   }
-
   setActiveWindow($window);
 }
 

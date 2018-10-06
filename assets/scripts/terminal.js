@@ -33,12 +33,8 @@ function BrowserFSConfigure() {
                 resolve();
             }
         });
-    }).then(function() {
-      syncFolder('/');
     });
 }
-
- BrowserFSConfigure();
 
 var name = 'git'; // terminal name for history
 window.fs = BrowserFS.BFSRequire('fs');
@@ -1116,9 +1112,6 @@ function initializeTerminal() {
       }
   }, {
       execHash: true,
-      onResize: function() {
-          this.innerHeight(this.parent().height());
-      },
       completion: function(string, cb) {
           var cmd = $.terminal.parse_command(this.before_cursor());
           function processAssets(callback) {
