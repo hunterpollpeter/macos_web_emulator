@@ -18,6 +18,9 @@ $(function() {
     syncFolder('/');
   });
 
+  $terminal_icon = createIcon('terminal', 'terminal_icon', 'assets/images/terminal.png', function(){ return openTerminal() });
+  $('#desktop').append($terminal_icon);
+
   openTerminal()
 });
 
@@ -100,14 +103,14 @@ async function syncFolder(path) {
 
 function createFolder(name) {
   var id = `folder_${name.replace(/ /g,"_")}`;
-  $folder = createIcon(name, id, function(){ return openFolder(name) });
+  $folder = createIcon(name, id, 'assets/images/folder.png', function(){ return openFolder(name) });
   $('#desktop').append($folder);
 }
 
-function createIcon(name, id, dblclick) {
+function createIcon(name, id, img, dblclick) {
   var $icon = $(`
     <div id='${id}' class='icon draggable' name='${name}'>
-      <div class='icon-image folder'></div>
+      <img src="${img}" class='icon-image'/>
       <div class="icon-name">
         <span>${name}</span>
       </div>
