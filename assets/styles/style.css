@@ -70,11 +70,6 @@
   opacity: 1;
 }
 
-.window {
-  min-width: 200px !important;
-  min-height: 200px !important;
-}
-
 .windowtitle {
   font-size: 11pt;
   line-height: 20px;

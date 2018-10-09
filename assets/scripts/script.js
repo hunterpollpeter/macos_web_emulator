@@ -3,8 +3,6 @@ $(function() {
     $('.icon').removeClass('icon-selected');
   });
 
-  createWindows();
-
   set_windowStack();
 
   BrowserFSConfigure().then(function() {
@@ -16,25 +14,6 @@ $(function() {
 
   openTerminal()
 });
-
-function createWindows() {
-  // set active window
-  $('.window').mousedown(function(e) {
-    $('.window').removeClass('active');
-    $(this).addClass('active');
-    windowStack();
-  });
-  $('.window').prepend("<div class='resizers'><div class='resizer top-left'></div><div class='resizer top-right'></div><div class='resizer bottom-left'></div><div class='resizer bottom-right'></div></div>");
-  $('.window .header').prepend("<div class='buttons'><div class='button close'><span class='closebutton'>x</span></div><div class='button minimize'><span class='minimizebutton'>&ndash;</span></div><div class='button zoom'><span class='zoombutton'>+</span></div></div>");
-  $('.window .close').click(function(e) {
-    e.preventDefault();
-    parentWindow_recursive(e.currentTarget).remove();
-  });
-  $('.window .zoom').click(function(e) {
-    e.preventDefault();
-    $(parentWindow_recursive(e.currentTarget)).toggleClass('zoomed');
-  });
-}
 
 function set_windowStack() {
   var start = 999;
@@ -96,13 +75,13 @@ async function syncFolder(path) {
 
 function createFolder(name) {
   var id = `folder_${name.replace(/ /g,"_")}`;
-  $folder = createIcon(name, id, 'assets/images/folder.png', function(){ return openFolder(name) });
+  $folder = createIcon(name, id, 'assets/images/folder.png', function(){ return openFolder(name) }).addClass('folder');
   $('#desktop').append($folder);
 }
 
 function createIcon(name, id, img, dblclick) {
   return  $(`
-    <div id='${id}' class='icon folder' name='${name}'>
+    <div id='${id}' class='icon' name='${name}'>
       <img src="${img}" class='icon-image'/>
       <div class="icon-name">
         <span>${name}</span>
@@ -137,18 +116,11 @@ function createIcon(name, id, img, dblclick) {
 function createWindow(name, content) {
   var safe_name = name.replace(/ /g,"_");
   var $window = $(`
-    <div id="window_${safe_name}" class="window resizable" name="${name}">
+    <div id="window_${safe_name}" class="window" name="${name}">
       <div class="header">
         <span class="windowtitle">${name}</span>
       </div>
       <div class="content"></div>
-    </div>`);
-  $window.prepend(`
-    <div class='resizers'>
-      <div class='resizer top-left'></div>
-      <div class='resizer top-right'></div>
-      <div class='resizer bottom-left'></div>
-      <div class='resizer bottom-right'></div>
     </div>`)
   .mousedown(function(e) {
       setActiveWindow($(this));
@@ -182,7 +154,12 @@ function createWindow(name, content) {
   $window.draggable({
     addClasses: false,
     handle: $header
-  }).css("position", "absolute");
+  }).css("position", "absolute")
+  .resizable({
+    handles: "all",
+    minWidth: 200,
+    minHeight: 200
+  });
 
   return $window;
 }
