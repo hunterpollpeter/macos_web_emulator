@@ -76,7 +76,7 @@ function setToZoomed(element) {
 // folder stuff
 async function syncFolder(path) {
   var items = await listDir(path);
-  var curr_folders = $('#desktop > .icon').has('.folder').map(function() {
+  var curr_folders = $('#desktop > .icon.folder').map(function() {
     return ('#' + this.id);
   }).get();
   var folders = [];
@@ -91,7 +91,7 @@ async function syncFolder(path) {
   });
 
   // remove folders that do not exist at all
-  $('#desktop').children('.icon').has('.folder').not(folders.join()).remove();
+  $('#desktop > .icon.folder').not(folders.join()).remove();
 }
 
 function createFolder(name) {
@@ -102,7 +102,7 @@ function createFolder(name) {
 
 function createIcon(name, id, img, dblclick) {
   return  $(`
-    <div id='${id}' class='icon' name='${name}'>
+    <div id='${id}' class='icon folder' name='${name}'>
       <img src="${img}" class='icon-image'/>
       <div class="icon-name">
         <span>${name}</span>
@@ -182,7 +182,7 @@ function createWindow(name, content) {
   $window.draggable({
     addClasses: false,
     handle: $header
-  });
+  }).css("position", "absolute");
 
   return $window;
 }
