@@ -7,13 +7,6 @@ $(function() {
 
   set_windowStack();
 
-  $('.window').each(function(i) {
-    dragableElement($(this));
-  });
-  $('.resizable').each(function(i) {
-    resizableElement(this);
-  });
-
   BrowserFSConfigure().then(function() {
     syncFolder('/');
   });
@@ -108,37 +101,43 @@ function createFolder(name) {
 }
 
 function createIcon(name, id, img, dblclick) {
-  var $icon = $(`
-    <div id='${id}' class='icon draggable' name='${name}'>
+  return  $(`
+    <div id='${id}' class='icon' name='${name}'>
       <img src="${img}" class='icon-image'/>
       <div class="icon-name">
         <span>${name}</span>
       </div>
-    </div>`);
-  dragableElement($icon);
-  return $icon.dblclick(function() {
+    </div>`)
+  .dblclick(function() {
     dblclick();
   })
   .mousedown(function() {
     $('.icon').removeClass('icon-selected');
-    $icon.addClass('icon-selected');
+    $(this).addClass('icon-selected');
     clearTimeout(this.downTimer);
     this.downTimer = setTimeout(function() {
-      $icon.addClass('icon-dragging');
+      $(this).addClass('icon-dragging');
     }, 75);
     return false;
   })
   .mouseup(function() {
     clearTimeout(this.downTimer);
-    $icon.removeClass('icon-dragging');
+    $(this).removeClass('icon-dragging');
   })
-  .draggable();
+  .draggable({
+    addClasses: false,
+    helper: "clone",
+    opacity: 0.6,
+    stop: function(e, ui) {
+      $(e.target).css(ui.position);
+    }
+  });
 }
 
 function createWindow(name, content) {
   var safe_name = name.replace(/ /g,"_");
   var $window = $(`
-    <div id="window_${safe_name}" class="window resizable draggable" name="${name}">
+    <div id="window_${safe_name}" class="window resizable" name="${name}">
       <div class="header">
         <span class="windowtitle">${name}</span>
       </div>
@@ -180,8 +179,11 @@ function createWindow(name, content) {
   var $content = $window.children('.content');
   $content.append(content);
 
-  dragableElement($window);
-  resizableElement($window[0]);
+  $window.draggable({
+    addClasses: false,
+    handle: $header
+  });
+
   return $window;
 }
 
@@ -211,10 +213,4 @@ function setActiveWindow(element) {
   $('.window').removeClass('active');
   $window.addClass('active');
   windowStack();
-}
-
-$.fn.draggable = function() {
-  this.addClass('draggable');
-  dragableElement(this);
-  return this;
 }

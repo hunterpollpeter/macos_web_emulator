@@ -27,6 +27,8 @@
 }
 
 .window {
+  position: absolute;
+  display: inline-block;
   background: #fff;
   border-radius: 6px;
   box-shadow: 0px 0px 20px rgba(0,0,0,0.25);
@@ -218,30 +220,12 @@ h3 {
 }
 
 .icon {
+  position: absolute;
   width: 70px;
   padding: 5px;
   text-align: center;
   cursor: pointer;
-}
-
-.icon::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  transition: transform 0.25s, opacity 0.25s;
-  border-radius: 6px;
-}
-
-.icon.icon-dragging {
-  opacity: 0.75;
-  z-index: 2000;
-}
-
-.icon.icon-selected::after {
-  background: rgba(0,0,0,0.25);
+  display: inline-block;
 }
 
 .icon img.icon-image {
@@ -261,19 +245,6 @@ h3 {
   color: white;
   font-size: 14px;
   padding: 5px;
-}
-
-.icon.icon-selected .icon-name {
-  background: rgba(0,0,0,0.7);
-  position: absolute;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-  overflow: visible;
-  border-radius: 6px;
-}
-
-.icon .icon-name span {
 }
 
 .p-0 {
